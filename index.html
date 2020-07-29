@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Meditation Timer</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+	<h1 id="title" class = "">Meditation Timer</h1>
+	<div class='container center'>
+
+
+	    <form class="">
+	    
+	    <div class="group">
+	    
+	    	<label for="duration">Duration</label>
+	    	<!-- <div>
+	    		<span id="errMsg">invalid input</span>
+	    		
+	    	</div>
+	    	 -->
+	    	<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
+	    	<label for="startingBell">Starting Bell</label>
+	    	<select id="startingBell" name="startingBell">
+	    		<option value="none">None</option>
+	    		<option value="gong">Gong</option>
+	    		<option value="bell">Bell</option>
+	    	</select>
+	    	
+	    	<label for="endingBell">Ending Bell</label>
+	    	<select id="endingBell" name="endingBell">
+	    		<option value="none">None</option>
+	    		<option value="gong" selected>Gong</option>
+	    		<option value="bell">Bell</option>
+	    	</select>
+	    </div>
+	    	<div class="center">
+	    		<button id="submit">Start</button>
+	    		
+	    	</div>
+	    	
+	    
+	    </form>
+	    <div id="countdownContainer">
+	    	<h1 class="hidden"  id="countdown" ></h1>
+	    	<button class="hidden" id="finish">Finish</button>
+		</div>
+		
+		
+    </div>
+    
+    <button class="button play hidden">&#9658 </button>
+		
+	<button class="button pause hidden"><div id="pauseText">&#9616&#9616</div></button>
+    <script  src="main.js"></script> 
+</body>
+</html>
