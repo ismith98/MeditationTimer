@@ -70,6 +70,13 @@ h1{
 label{
 	font-size: 1.5rem;
 	grid-column-start: 1;
+	padding-top: 10px;
+}
+
+.inputContainer{
+	grid-column-start: 2;
+	margin: 15px 5px 1px 5px;
+	text-align:center;
 }
 
 input, #submit{
@@ -79,7 +86,6 @@ input, #submit{
 
 
 input[type=number], select {
-	grid-column-start: 4;
 	text-align:center;
 
 }
@@ -91,6 +97,10 @@ input[type=number]:focus{
 input, select, #submit{
 	width: 120px;
 	height: 35px;
+	/*margin: 15px 5px 1px 5px;*/
+}
+
+#submit{
 	margin: 15px 5px 1px 5px;
 }
 

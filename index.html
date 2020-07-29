@@ -15,25 +15,29 @@
 	    <div class="group">
 	    
 	    	<label for="duration">Duration</label>
-	    	<!-- <div>
-	    		<span id="errMsg">invalid input</span>
-	    		
+	    	 <div class="inputContainer">
+	    		<span id="errMsg">Must be a whole number greater than 0</span>
+	    		<br>
+	    		<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
 	    	</div>
-	    	 -->
-	    	<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
-	    	<label for="startingBell">Starting Bell</label>
-	    	<select id="startingBell" name="startingBell">
-	    		<option value="none">None</option>
-	    		<option value="gong">Gong</option>
-	    		<option value="bell">Bell</option>
-	    	</select>
 	    	
+	    	
+	    	<label for="startingBell">Starting Bell</label>
+	    	<div class="inputContainer">
+		    	<select id="startingBell" name="startingBell">
+		    		<option value="none">None</option>
+		    		<option value="gong">Gong</option>
+		    		<option value="bell">Bell</option>
+		    	</select>
+	    	</div>
 	    	<label for="endingBell">Ending Bell</label>
-	    	<select id="endingBell" name="endingBell">
-	    		<option value="none">None</option>
-	    		<option value="gong" selected>Gong</option>
-	    		<option value="bell">Bell</option>
-	    	</select>
+	    	<div class="inputContainer">
+		    	<select id="endingBell" name="endingBell">
+		    		<option value="none">None</option>
+		    		<option value="gong" selected>Gong</option>
+		    		<option value="bell">Bell</option>
+		    	</select>
+	    	</div>
 	    </div>
 	    	<div class="center">
 	    		<button id="submit">Start</button>
