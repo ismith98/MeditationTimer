@@ -16,14 +16,20 @@
 	    
 	    	<label for="duration">Duration</label>
 	    	 <div class="inputContainer">
-	    		<span id="errMsg">Must be a whole number greater than 0</span>
+	    		<span id="durationErrMsg"></span>
 	    		<br>
 	    		<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
 	    	</div>
 	    	
+	    	<label for="warmup">Warm up</label>
+	    	<div class="inputContainer">
+	    		<span id="warmupErrMsg"></span>
+	    		<br>
+	    		<input type="number" min="0" placeholder="seconds" name="warmup" id="warmup" required>
+	    	</div>
 	    	
 	    	<label for="startingBell">Starting Bell</label>
-	    	<div class="inputContainer">
+	    	<div class="selectContainer">
 		    	<select id="startingBell" name="startingBell">
 		    		<option value="none">None</option>
 		    		<option value="gong">Gong</option>
@@ -31,7 +37,7 @@
 		    	</select>
 	    	</div>
 	    	<label for="endingBell">Ending Bell</label>
-	    	<div class="inputContainer">
+	    	<div class="selectContainer">
 		    	<select id="endingBell" name="endingBell">
 		    		<option value="none">None</option>
 		    		<option value="gong" selected>Gong</option>

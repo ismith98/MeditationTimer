@@ -18,7 +18,7 @@ body{
 	border: 2px solid white;
 	border-radius: 5px;
 	background-color: rgba(0, 0, 0, .45);
-	padding: 10px;
+	padding: 2px 10px 10px 10px;
 	width: 400px;
 	transform: translateY(0px);
 	transition: all 1s ease;
@@ -75,7 +75,13 @@ label{
 
 .inputContainer{
 	grid-column-start: 2;
-	margin: 15px 5px 1px 5px;
+	margin: 0px 5px 1px 5px;
+	text-align:center;
+}
+
+.selectContainer{
+	grid-column-start: 2;
+	margin: 18px 5px 1px 5px;
 	text-align:center;
 }
 
@@ -146,7 +152,7 @@ input, select, #submit{
 	
 }
 
-#errMsg{
+#durationErrMsg, #warmupErrMsg{
 	color: red;
 	font-size: 10px;
 	

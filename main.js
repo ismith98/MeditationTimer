@@ -1,6 +1,7 @@
 
 var submit = document.querySelector("#submit");
 var duration = document.querySelector("#duration");
+var warmup = document.querySelector("#warmup");
 var startingBell = document.querySelector("#startingBell");
 var endingBell = document.querySelector("#endingBell");
 var form = document.querySelector("form");
@@ -17,6 +18,7 @@ var countdownInterval;
 
 // 1 second = 1000ms
 const ONE_SECOND = 1000;
+const INPUT_ERR_MSG = "Must be a whole number greater than 0";
 
 submit.addEventListener("click", startTimer);
 
@@ -26,18 +28,44 @@ play.addEventListener("click", ()=> {startInterval();  togglePauseScreen() } );
 
 finish.addEventListener("click", displayForm);
 
+function removeInputErrMsg(inputElement, errMsgElement){
+
+	errMsgElement.innerText = "";
+	inputElement.style.border = "2px solid #ccc";
+	inputElement.removeEventListener("input", () => removeInputErrMsg(inputElement, errMsgElement));
+}
+
 function startTimer(ev) {
 	// Stop the form from doing its default action
 	ev.preventDefault();
 	ev.stopPropagation();
 	
 	let pattern = new RegExp("^\\d+$");
+	let inputErr = false;
 	
 	// Validate fields
-	/*if(duration.value == "" || duration.value == 0){*/
 	// If there's a value that's not a number return
 	if(!pattern.test(duration.value) || duration.value == 0 ) {
-		console.log("false");
+		let durationErrMsg = document.querySelector("#durationErrMsg");
+		durationErrMsg.innerText = INPUT_ERR_MSG;
+		duration.style.border = "2px solid red";
+		
+		// Set up an on change modifier for that input
+		duration.addEventListener("input", () => removeInputErrMsg(duration, durationErrMsg));
+		inputErr = true;
+	}
+	
+	if(!pattern.test(warmup.value) || warmup.value == 0 ) {
+		let warmupErrMsg = document.querySelector("#warmupErrMsg");
+		warmupErrMsg.innerText = INPUT_ERR_MSG;
+		warmup.style.border = "2px solid red";
+		
+		// Set up an on change modifier for that input
+		warmup.addEventListener("input", () => removeInputErrMsg(warmup, warmupErrMsg));
+		inputErr = true;
+	}
+	
+	if(inputErr) {
 		return;
 	}
 	
