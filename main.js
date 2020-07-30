@@ -1,7 +1,9 @@
 
 var submit = document.querySelector("#submit");
 var duration = document.querySelector("#duration");
+var durationErrMsg = document.querySelector("#durationErrMsg");
 var warmup = document.querySelector("#warmup");
+let warmupErrMsg = document.querySelector("#warmupErrMsg");
 var startingBell = document.querySelector("#startingBell");
 var endingBell = document.querySelector("#endingBell");
 var form = document.querySelector("form");
@@ -35,43 +37,51 @@ function removeInputErrMsg(inputElement, errMsgElement){
 	inputElement.removeEventListener("input", () => removeInputErrMsg(inputElement, errMsgElement));
 }
 
+function validateFields() {
+	// Only accept whole numbers
+	let pattern = new RegExp("^\\d+$");
+	let valid = true;
+	
+	// Test the duration field
+	if(!pattern.test(duration.value) || duration.value == 0 ) {
+		// Show the error message and make the border red
+		durationErrMsg.innerText = INPUT_ERR_MSG;
+		duration.style.border = "2px solid red";
+		
+		// When the input is changed, remove the error message
+		duration.addEventListener("input", () => removeInputErrMsg(duration, durationErrMsg));
+		valid = false;
+	}
+		
+	// Test the warmup field
+	if(!pattern.test(warmup.value) || warmup.value == 0 ) {
+		// Show the error message and make the border red
+		warmupErrMsg.innerText = INPUT_ERR_MSG;
+		warmup.style.border = "2px solid red";
+		
+		// When the input is changed, remove the error message
+		warmup.addEventListener("input", () => removeInputErrMsg(warmup, warmupErrMsg));
+		valid = false;
+	}
+	
+	return valid;
+	
+}
+
 function startTimer(ev) {
 	// Stop the form from doing its default action
 	ev.preventDefault();
 	ev.stopPropagation();
 	
-	let pattern = new RegExp("^\\d+$");
-	let inputErr = false;
 	
-	// Validate fields
-	// If there's a value that's not a number return
-	if(!pattern.test(duration.value) || duration.value == 0 ) {
-		let durationErrMsg = document.querySelector("#durationErrMsg");
-		durationErrMsg.innerText = INPUT_ERR_MSG;
-		duration.style.border = "2px solid red";
-		
-		// Set up an on change modifier for that input
-		duration.addEventListener("input", () => removeInputErrMsg(duration, durationErrMsg));
-		inputErr = true;
-	}
-	
-	if(!pattern.test(warmup.value) || warmup.value == 0 ) {
-		let warmupErrMsg = document.querySelector("#warmupErrMsg");
-		warmupErrMsg.innerText = INPUT_ERR_MSG;
-		warmup.style.border = "2px solid red";
-		
-		// Set up an on change modifier for that input
-		warmup.addEventListener("input", () => removeInputErrMsg(warmup, warmupErrMsg));
-		inputErr = true;
-	}
-	
-	if(inputErr) {
+	// If the input fields fails validation, then return
+	if(!validateFields()) {
 		return;
 	}
 	
 	//Set timer object
 	timerStats.duration = Number(duration.value);
-	timerStats.warmUp = Number(  0  );
+	timerStats.warmUp = Number(  warmup.value  ) * ONE_SECOND;
 	timerStats.startingBell = startingBell.value;
 	timerStats.endingBell = endingBell.value;
 	console.log(timerStats);
