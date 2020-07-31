@@ -225,6 +225,8 @@ function togglePauseScreen() {
 
 function dispalyRecapScreen() {
 	countdown.classList.add("hidden");
+	discard.classList.add("hidden");
+	finish.classList.add("hidden");
 	pause.classList.add("hidden");
 	pause.classList.toggle("fadein");
 	
