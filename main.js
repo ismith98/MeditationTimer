@@ -31,7 +31,7 @@ submit.addEventListener("click", startTimer);
 pause.addEventListener("click", ()=> {endInterval();  togglePauseScreen() });
 play.addEventListener("click", ()=> {startInterval();  togglePauseScreen() } );
 
-discard.addEventListener("click", displayHomeScreen);
+discard.addEventListener("click", ()=> {finishMeditating(); displayHomeScreen() });
 finish.addEventListener("click", completeSession);
 
 function removeInputErrMsg(inputElement, errMsgElement){
@@ -140,6 +140,7 @@ function completeSession() {
 	timerStats.endTime = new Date();
 	console.log(timerStats);
 	
+	finishMeditating();
 	dispalyRecapScreen();
 }
 
@@ -223,16 +224,21 @@ function togglePauseScreen() {
 	play.classList.toggle("hidden");
 }
 
-function dispalyRecapScreen() {
+function finishMeditating() {
 	countdown.classList.add("hidden");
 	discard.classList.add("hidden");
 	finish.classList.add("hidden");
+	play.classList.add("hidden");
 	pause.classList.add("hidden");
 	pause.classList.toggle("fadein");
 	
 	// Return the container's shape to a square
 	container.classList.remove("meditating");
 	
+	
+}
+
+function dispalyRecapScreen() {
 	setTimeout(displayHomeScreen, 3000);
 }
 
