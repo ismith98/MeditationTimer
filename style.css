@@ -25,8 +25,8 @@ body{
 }
 
 .meditating{
-	height:250px;
-	width: 250px;
+	height:275px;
+	width: 275px;
 	border-radius: 50%;
 	transform: translateY(-30px);
 	position: relative;
@@ -110,11 +110,33 @@ input, select, #submit{
 	margin: 15px 5px 1px 5px;
 }
 
+/*************************************************************/
+/* Countdown screen */
+/*************************************************************/
 
-#finish{
+#countdown{
+	margin-bottom: 0;
+	font-size: 4.5rem;
+}
+
+#endSessionButtonContainer{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+
+#finish, #discard{
 	width: 120px;
 	height: 35px;
+	margin: 10px 0;
 }
+
+#discard{
+	margin-bottom: 0;
+	background-color: rgba(255, 255, 255, .3);
+}
+
+
 
 .button.pause{
 	font-size: 25px;

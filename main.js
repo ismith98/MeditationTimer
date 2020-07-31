@@ -3,7 +3,7 @@ var submit = document.querySelector("#submit");
 var duration = document.querySelector("#duration");
 var durationErrMsg = document.querySelector("#durationErrMsg");
 var warmup = document.querySelector("#warmup");
-let warmupErrMsg = document.querySelector("#warmupErrMsg");
+var warmupErrMsg = document.querySelector("#warmupErrMsg");
 var startingBell = document.querySelector("#startingBell");
 var endingBell = document.querySelector("#endingBell");
 var form = document.querySelector("form");
@@ -12,14 +12,18 @@ var title = document.querySelector("#title");
 var countdown = document.querySelector("#countdown");
 var pause = document.querySelector(".button.pause");
 var play = document.querySelector(".button.play");
+var warmupText = document.querySelector("#warmupText");
 
+var discard = document.querySelector("#discard");
 var finish = document.querySelector("#finish");
 
 var timerStats = {};
+var warmupInterval;
 var countdownInterval;
 
 // 1 second = 1000ms
 const ONE_SECOND = 1000;
+const ONE_MINUTE = 60 * 1000;
 const INPUT_ERR_MSG = "Must be a whole number greater than 0";
 
 submit.addEventListener("click", startTimer);
@@ -27,8 +31,8 @@ submit.addEventListener("click", startTimer);
 pause.addEventListener("click", ()=> {endInterval();  togglePauseScreen() });
 play.addEventListener("click", ()=> {startInterval();  togglePauseScreen() } );
 
-
-finish.addEventListener("click", displayForm);
+discard.addEventListener("click", displayHomeScreen);
+finish.addEventListener("click", completeSession);
 
 function removeInputErrMsg(inputElement, errMsgElement){
 
@@ -52,9 +56,15 @@ function validateFields() {
 		duration.addEventListener("input", () => removeInputErrMsg(duration, durationErrMsg));
 		valid = false;
 	}
-		
-	// Test the warmup field
-	if(!pattern.test(warmup.value) || warmup.value == 0 ) {
+	
+	// If the warmup field is empty then change it's value to 0
+	// 0 can be accepted in the warmup field
+	if(warmup.value == "") {
+		warmup.value = 0;
+	}
+	
+	// Test the warmup field this can be 0
+	if(!pattern.test(warmup.value) ) {
 		// Show the error message and make the border red
 		warmupErrMsg.innerText = INPUT_ERR_MSG;
 		warmup.style.border = "2px solid red";
@@ -80,48 +90,66 @@ function startTimer(ev) {
 	}
 	
 	//Set timer object
-	timerStats.duration = Number(duration.value);
-	timerStats.warmUp = Number(  warmup.value  ) * ONE_SECOND;
+	timerStats.timeLeft = Number(duration.value) * ONE_MINUTE;
+	timerStats.warmup = Number(  warmup.value  ) * ONE_SECOND;
 	timerStats.startingBell = startingBell.value;
 	timerStats.endingBell = endingBell.value;
+	
+	displayWarmupScreen();
+	/*
+	displayMeditationScreen();
+	dispalyRecapScreen();
+	displayHomeScreen();
+	*/
+	// Warm up countdown
+	warmupCountdown();
+	if(timerStats.warmup != 0) {
+		warmupInterval = setInterval(warmupCountdown, ONE_SECOND);
+	}
+	
+	
+	// Countdown every second
+	/*meditationCountdown();
+	countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
+	*/	
+}
+
+function warmupCountdown() {
+	if(timerStats.warmup < ONE_SECOND) {
+		clearInterval(warmupInterval);
+		countdown.innerText = `00:00`;
+		
+		
+		displayMeditationScreen();
+		
+		// Start the meditation countdown
+		meditationCountdown();
+		countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
+		// Play the start gong
+		return;
+	} else {
+		let seconds = Math.floor((timerStats.warmup ) / 1000);
+		countdown.innerText = `${seconds}`;
+		
+		//Decrement the amount of time left by 1000ms or 1 second
+		timerStats.warmup -= ONE_SECOND;
+	}
+}
+
+function completeSession() {
+	timerStats.endTime = new Date();
 	console.log(timerStats);
 	
-	// Change to meditate mode
-	changeModes();
-	
-	// Calculate the countdown every second
-	let startTime = new Date();	
-	
-	// Create a clone of the start time, adding the starting duration
-	let endTime = new Date(startTime.getFullYear(), 
-		startTime.getMonth(), startTime.getDate(),
-		startTime.getHours(), 
-		Number( startTime.getMinutes() ) + timerStats.duration,
-	 	startTime.getSeconds() + timerStats.warmUp);
-	
-	console.log(startTime)
-	console.log(endTime)
-	
-	let offsetToRoundUpToClosestSecond = ONE_SECOND;
-	timerStats.timeLeft = offsetToRoundUpToClosestSecond + endTime.getTime() - startTime.getTime();
-	
-	
-	
-	calcCountdown();
-	countdownInterval = setInterval(calcCountdown, ONE_SECOND);
-	
-	
-	
-	// Display the countdown
-	//countdown.innerText = timerStats.duration;
+	dispalyRecapScreen();
 }
 
 
-function calcCountdown() {
-	console.log(timerStats.timeLeft)
+function meditationCountdown() {
+	//console.log(timerStats.timeLeft)
 	if(timerStats.timeLeft < ONE_SECOND) {
+		completeSession();
 		countdown.innerText = `00:00`;
-		endInterval();
+		clearInterval(countdownInterval);
 	} else {
 		
 		let hours = Math.floor((timerStats.timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -130,6 +158,7 @@ function calcCountdown() {
 		
 		let countdownText = ``;
 		
+		// If its over an hour long then display an hours column
 		if(hours > 0) {
 			countdownText += `${hours}:`;
 		}
@@ -158,31 +187,59 @@ function calcCountdown() {
 }
 
 function startInterval() {
-	countdownInterval = setInterval(calcCountdown, ONE_SECOND);
+	countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
 }
 
 function endInterval() {
 	clearInterval(countdownInterval);
 }
 
+
+
+function displayWarmupScreen() {
+	title.classList.add("hidden");
+	form.classList.add("hidden");
+	container.classList.add("meditating");
+	
+	// Display the countdown text
+	countdown.classList.remove("hidden");
+	// Hide the warmup message
+	warmupText.classList.remove("hidden");
+}
+
+function displayMeditationScreen() {
+	// Hide the warmup message
+	warmupText.classList.add("hidden");
+	
+	// Display the pause button
+	pause.classList.remove("hidden");
+	setTimeout(() => pause.classList.toggle("fadein"), 50);
+}
+
 function togglePauseScreen() {
+	discard.classList.toggle("hidden");
 	finish.classList.toggle("hidden");
 	pause.classList.toggle("hidden");
 	play.classList.toggle("hidden");
 }
 
-function changeModes() {
-	//Change to meditate mode
-	title.classList.toggle("hidden");
-	form.classList.toggle("hidden");
-	container.classList.toggle("meditating");
-	countdown.classList.toggle("hidden");
-	pause.classList.toggle("hidden");
-	setTimeout(() => pause.classList.toggle("fadein"), 50);
+function dispalyRecapScreen() {
+	countdown.classList.add("hidden");
+	pause.classList.add("hidden");
+	pause.classList.toggle("fadein");
+	
+	// Return the container's shape to a square
+	container.classList.remove("meditating");
+	
+	setTimeout(displayHomeScreen, 3000);
 }
 
-function displayForm() {
-	//Remove pause screen
-	togglePauseScreen();
-	changeModes();
+function displayHomeScreen() {
+	//Display the title and form
+	title.classList.remove("hidden");
+	form.classList.remove("hidden");
 }
+
+
+
+
