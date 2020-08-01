@@ -17,6 +17,8 @@ var warmupText = document.querySelector("#warmupText");
 var discard = document.querySelector("#discard");
 var finish = document.querySelector("#finish");
 
+var recapScreen = document.querySelector("#recapScreen");
+
 var timerStats = {};
 var warmupInterval;
 var countdownInterval;
@@ -90,6 +92,7 @@ function startTimer(ev) {
 	}
 	
 	//Set timer object
+	timerStats.totalTime = Number(duration.value) * ONE_MINUTE;
 	timerStats.timeLeft = Number(duration.value) * ONE_MINUTE;
 	timerStats.warmup = Number(  warmup.value  ) * ONE_SECOND;
 	timerStats.startingBell = startingBell.value;
@@ -119,7 +122,6 @@ function warmupCountdown() {
 		clearInterval(warmupInterval);
 		countdown.innerText = `00:00`;
 		
-		
 		displayMeditationScreen();
 		
 		// Start the meditation countdown
@@ -138,6 +140,8 @@ function warmupCountdown() {
 
 function completeSession() {
 	timerStats.endTime = new Date();
+	// Find out the session length in ms
+	timerStats.timeMeditated = timerStats.totalTime - timerStats.timeLeft;
 	console.log(timerStats);
 	
 	finishMeditating();
@@ -239,7 +243,86 @@ function finishMeditating() {
 }
 
 function dispalyRecapScreen() {
-	setTimeout(displayHomeScreen, 3000);
+	recapScreen.classList.remove("hidden");
+	
+	let timeMeditated = document.querySelector("#timeMeditated");
+	let timeLabel = document.querySelector("#timeLabel");
+	let daysCounter = document.querySelector("#daysCounter");
+	let daysIcons = [];
+	daysIcons.push(document.querySelector("#monday"));
+	daysIcons.push(document.querySelector("#tuesday"));
+	daysIcons.push(document.querySelector("#wednesday"));
+	daysIcons.push(document.querySelector("#thursday"));
+	daysIcons.push(document.querySelector("#friday"));
+	daysIcons.push(document.querySelector("#saturday"));
+	daysIcons.push(document.querySelector("#sunday"));
+	
+	
+	/*
+	const NUMBER_OF_DAYS = 7;
+	for(let i = 0; i < NUMBER_OF_DAYS; i++) {
+		
+	}
+	*/
+	
+	const MILLISECONS_IN_A_DAY = 86400000;
+	
+	// If there is a streak then add one to it
+	let streak = Number( localStorage.getItem("streak") );
+	let lastMeditationValue = Number ( localStorage.getItem("lastMeditationValue"));
+	let lastMeditationDay = Number( localStorage.getItem("lastMeditationDay"));
+	// If there is no streak or it's not a consecutive day'
+	
+	// If the day is 1+ the prev one and the value is less than millis in one day then it's consec
+	// If streak is null or its not a consec day
+	if( streak == 0 ||
+		!( Number(lastMeditationDay) + 1 == timerStats.endTime.getDay() &&
+		timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY )) {
+
+		streak = 1;
+		
+	} else {
+		// Check if it is a consecutive day
+		streak += 1;
+	}
+	
+	// Update local storage
+	localStorage.setItem("lastMeditationValue", `${timerStats.endTime.valueOf()}`);
+	localStorage.setItem("lastMeditationDay", `${timerStats.endTime.getDay()}`);
+	localStorage.setItem("streak", `${streak}`);
+	console.log(localStorage);
+	
+	// Dislay the streak values
+	daysCounter.innerText = `${streak}`;
+	let day = timerStats.endTime.getDay();
+	while(streak > 0 && day >= 0) {
+		daysIcons[day].classList.add("completed");
+		streak--;
+		day--;
+	}
+	
+	
+	
+	
+	// If there is no streak or the streak is 0
+	
+	
+	
+	
+	if(timerStats.timeMeditated < ONE_MINUTE) {
+		timeMeditated.innerText = (timerStats.timeMeditated / ONE_SECOND) - 1;
+		timeLabel.innerText = " seconds ";
+	} else {
+		timeMeditated.innerText = Math.floor(timerStats.timeMeditated / ONE_MINUTE);
+		timeLabel.innerText = " minutes ";
+	}
+	
+	let closeButton = document.querySelector("#closeButton");
+	closeButton.addEventListener("click", () => {
+		recapScreen.classList.add("hidden");
+		displayHomeScreen();
+	})
+	
 }
 
 function displayHomeScreen() {

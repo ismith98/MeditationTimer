@@ -90,7 +90,7 @@ label{
 	text-align:center;
 }
 
-input, #submit{
+input, #submit, #closeButton{
 	border-radius: 5px;
 	border:2px solid #ccc;
 }
@@ -105,7 +105,7 @@ input[type=number]:focus{
 	border-color: #333;
 }
 
-input, select, #submit{
+input, select, #submit, #closeButton{
 	width: 120px;
 	height: 35px;
 	/*margin: 15px 5px 1px 5px;*/
@@ -192,6 +192,44 @@ input, select, #submit{
 /*************************************************************/
 /* Recap Screen styles */
 /*************************************************************/
+#consecutiveDaysTitle{
+	font-size: 2em;
+	
+}
+
+#daysIcons{
+	display:flex;
+	
+}
+
+.dayIcon{
+	border: 1px black solid;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin: 10px 3px;
+}
+
+.dayIcon.completed {
+	background-color:white;
+	color:black;
+}
+
+#closeButton{
+	margin: 20px 5px 1px 5px;
+}
+
+#consecutiveDaysTitle {
+	margin-top: 20px;
+}
+
+#congratsMessage{
+	margin-top:20px;
+	font-size: 1.5em;
+}
 
 
 /*************************************************************/
