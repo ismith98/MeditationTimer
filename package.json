@@ -1,0 +1,23 @@
+{
+  "name": "MeditationTimer",
+  "version": "1.0.0",
+  "description": "A timer with gongs at the start and end of its execution",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ismith98/MeditationTimer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ismith98/MeditationTimer/issues"
+  },
+  "homepage": "https://github.com/ismith98/MeditationTimer#readme",
+  "devDependencies": {
+    "jest": "^26.2.2"
+  }
+}

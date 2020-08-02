@@ -242,6 +242,33 @@ function finishMeditating() {
 	
 }
 
+function checkStreak() {
+	const MILLISECONS_IN_A_DAY = 86400000;
+	
+	let firstMeditationOfTheDay;
+	
+	// If there is a streak then add one to it
+	let streak = Number( localStorage.getItem("streak") );
+	let lastMeditationValue = Number ( localStorage.getItem("lastMeditationValue"));
+	let lastMeditationDay = Number( localStorage.getItem("lastMeditationDay"));
+	// If there is no streak or it's not a consecutive day'
+	
+	
+	if ( Number(lastMeditationDay) + 1 == timerStats.endTime.getDay() &&
+		timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY ) {
+		// it is a consecutive day
+		streak += 1;
+		firstMeditationOfTheDay = true;
+	} else if( timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY ) {
+		// If its in the same day don't mod the streak
+		firstMeditationOfTheDay = false;
+	} else {
+		streak = 1;
+		firstMeditationOfTheDay = true;
+	}
+	return {streak: streak, firstMeditationOfTheDay: firstMeditationOfTheDay};
+}
+
 function dispalyRecapScreen() {
 	recapScreen.classList.remove("hidden");
 	
@@ -249,13 +276,13 @@ function dispalyRecapScreen() {
 	let timeLabel = document.querySelector("#timeLabel");
 	let daysCounter = document.querySelector("#daysCounter");
 	let daysIcons = [];
+	daysIcons.push(document.querySelector("#sunday"));
 	daysIcons.push(document.querySelector("#monday"));
 	daysIcons.push(document.querySelector("#tuesday"));
 	daysIcons.push(document.querySelector("#wednesday"));
 	daysIcons.push(document.querySelector("#thursday"));
 	daysIcons.push(document.querySelector("#friday"));
 	daysIcons.push(document.querySelector("#saturday"));
-	daysIcons.push(document.querySelector("#sunday"));
 	
 	
 	/*
@@ -265,39 +292,31 @@ function dispalyRecapScreen() {
 	}
 	*/
 	
-	const MILLISECONS_IN_A_DAY = 86400000;
+	let streakObj = checkStreak();
 	
-	// If there is a streak then add one to it
-	let streak = Number( localStorage.getItem("streak") );
-	let lastMeditationValue = Number ( localStorage.getItem("lastMeditationValue"));
-	let lastMeditationDay = Number( localStorage.getItem("lastMeditationDay"));
-	// If there is no streak or it's not a consecutive day'
 	
-	// If the day is 1+ the prev one and the value is less than millis in one day then it's consec
-	// If streak is null or its not a consec day
-	if( streak == 0 ||
-		!( Number(lastMeditationDay) + 1 == timerStats.endTime.getDay() &&
-		timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY )) {
-
-		streak = 1;
-		
-	} else {
-		// Check if it is a consecutive day
-		streak += 1;
-	}
 	
 	// Update local storage
 	localStorage.setItem("lastMeditationValue", `${timerStats.endTime.valueOf()}`);
 	localStorage.setItem("lastMeditationDay", `${timerStats.endTime.getDay()}`);
-	localStorage.setItem("streak", `${streak}`);
+	localStorage.setItem("streak", `${streakObj.streak}`);
 	console.log(localStorage);
 	
 	// Dislay the streak values
-	daysCounter.innerText = `${streak}`;
+	daysCounter.innerText = `${streakObj.streak}`;
 	let day = timerStats.endTime.getDay();
-	while(streak > 0 && day >= 0) {
-		daysIcons[day].classList.add("completed");
-		streak--;
+	const currentDay = day;
+	// Fill in the day icon bubbles
+	while(streakObj.streak > 0 && day >= 0) {
+		// If it's the current day then fade in that bubble
+		if(streakObj.firstMeditationOfTheDay && currentDay == day) {
+			daysIcons[day].classList.add("currentDay");
+			setTimeout(() => daysIcons[Day].classList.add("completed"), 300);
+		} else{
+			daysIcons[day].classList.add("completed");
+		}
+
+		streakObj.streak--;
 		day--;
 	}
 	

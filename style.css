@@ -231,6 +231,10 @@ input, select, #submit, #closeButton{
 	font-size: 1.5em;
 }
 
+.currentDay{
+	transition: all 2s ease;
+}
+
 
 /*************************************************************/
 /* Screen size reactivity */
