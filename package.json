@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/ismith98/MeditationTimer#readme",
   "devDependencies": {
-    "jest": "^26.2.2"
+    "jest": "^26.2.2",
+    "watchify": "^3.11.1"
+  },
+  "dependencies": {
+    "moment": "^2.27.0"
   }
 }

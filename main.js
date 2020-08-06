@@ -1,3 +1,5 @@
+var moment = require('moment');
+moment().format();
 
 var submit = document.querySelector("#submit");
 var duration = document.querySelector("#duration");
@@ -242,6 +244,8 @@ function finishMeditating() {
 	
 }
 
+
+// Before I imported moment.js
 function checkStreak() {
 	const MILLISECONS_IN_A_DAY = 86400000;
 	
@@ -250,28 +254,70 @@ function checkStreak() {
 	// If there is a streak then add one to it
 	let streak = Number( localStorage.getItem("streak") );
 	let lastMeditationValue = Number ( localStorage.getItem("lastMeditationValue"));
-	let lastMeditationDay = Number( localStorage.getItem("lastMeditationDay"));
+	//let lastMeditationDay = Number( localStorage.getItem("lastMeditationDay"));
 	// If there is no streak or it's not a consecutive day'
 	
+	let daysMeditatedEachWeek = updateWeek(lastMeditationValue);
 	
+	let startOfDay = moment().startOf('day');
+	let lastMeditationDate = moment(lastMeditationValue);
+	
+	if(lastMeditationDate.isSame(timerStats.endTime, "day")){
+		// If its in the same day don't mod the streak
+	} else if( lastMeditationDate.add(1, "day").isSame(timerStats.endTime, "day") ) {
+		// If its a consecutive day add increment the streak
+		streak++;
+	} else {
+		// If it's neither, start a new streak
+		streak = 1;
+	}
+	/*
 	if ( Number(lastMeditationDay) + 1 == timerStats.endTime.getDay() &&
 		timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY ) {
 		// it is a consecutive day
 		streak += 1;
-		firstMeditationOfTheDay = true;
 	} else if( timerStats.endTime.valueOf() - lastMeditationValue < MILLISECONS_IN_A_DAY ) {
 		// If its in the same day don't mod the streak
-		firstMeditationOfTheDay = false;
 	} else {
 		streak = 1;
-		firstMeditationOfTheDay = true;
-	}
-	return {streak: streak, firstMeditationOfTheDay: firstMeditationOfTheDay};
+	}*/
+	return {streak: streak, daysMeditatedEachWeek: daysMeditatedEachWeek};
+}
+
+function updateWeek(lastMeditationValue) {
+	let lastMeditationDate = moment(lastMeditationValue);
+	// Use the local storage values to figure out which days you meditated this week
+	let startOfWeek = moment().startOf('week');
+	
+	let daysMeditatedEachWeek = localStorage.getItem("daysMeditatedEachWeek")
+	// if its a new week or there is no week data, then create it
+	if(lastMeditationDate.diff(startOfWeek) < 0 || daysMeditatedEachWeek == "" 
+		|| daysMeditatedEachWeek == null) {
+			daysMeditatedEachWeek = new Array(7);
+			// Use strings bc it will be converted to strings when stored localStorage
+			daysMeditatedEachWeek.fill("false");
+		}
+	// Else, there is already week data so get it from local memory
+	
+		else {
+			// Convert the string into an array
+			daysMeditatedEachWeek = daysMeditatedEachWeek.split(",");
+		}
+	
+	
+	// Completed a meditation that day
+	daysMeditatedEachWeek[timerStats.endTime.getDay()] = "true";
+	
+	//Update local storage
+	localStorage.setItem("daysMeditatedEachWeek", daysMeditatedEachWeek/*.toString()*/);
+	
+	return daysMeditatedEachWeek;
 }
 
 function dispalyRecapScreen() {
 	recapScreen.classList.remove("hidden");
-	
+	//localStorage.clear();
+
 	let timeMeditated = document.querySelector("#timeMeditated");
 	let timeLabel = document.querySelector("#timeLabel");
 	let daysCounter = document.querySelector("#daysCounter");
@@ -284,50 +330,51 @@ function dispalyRecapScreen() {
 	daysIcons.push(document.querySelector("#friday"));
 	daysIcons.push(document.querySelector("#saturday"));
 	
-	
-	/*
-	const NUMBER_OF_DAYS = 7;
-	for(let i = 0; i < NUMBER_OF_DAYS; i++) {
-		
-	}
-	*/
-	
+	// Check if there is a streak and if it is the first time meditating that day
 	let streakObj = checkStreak();
-	
-	
 	
 	// Update local storage
 	localStorage.setItem("lastMeditationValue", `${timerStats.endTime.valueOf()}`);
 	localStorage.setItem("lastMeditationDay", `${timerStats.endTime.getDay()}`);
 	localStorage.setItem("streak", `${streakObj.streak}`);
-	console.log(localStorage);
+	// Append this session to local storage
+	let sessions = localStorage.getItem("sessions");
 	
-	// Dislay the streak values
+	if(sessions == "" || sessions == null) {
+		// Format: '|' between sessions, '~' between items
+		localStorage.setItem("sessions", `${timerStats.endTime.toISOString()}~${timerStats.timeMeditated}`);
+	} else {
+		// Format: '|' between sessions, '~' between items
+		localStorage.setItem("sessions", `${sessions}|${timerStats.endTime.toISOString()}~${timerStats.timeMeditated}`);
+	}
+	let sessionData = localStorage.getItem("sessions").split("|");
+	console.log(localStorage);
+	console.log(sessionData);
+	console.log(streakObj)
+	// Display how long of a streak you're on
 	daysCounter.innerText = `${streakObj.streak}`;
+	
+	// Fill in the days icon for each day you meditated that week
 	let day = timerStats.endTime.getDay();
-	const currentDay = day;
-	// Fill in the day icon bubbles
-	while(streakObj.streak > 0 && day >= 0) {
-		// If it's the current day then fade in that bubble
-		if(streakObj.firstMeditationOfTheDay && currentDay == day) {
-			daysIcons[day].classList.add("currentDay");
-			setTimeout(() => daysIcons[Day].classList.add("completed"), 300);
-		} else{
-			daysIcons[day].classList.add("completed");
+	for(let i = 0; i <= day; i++) {
+		// If its the current day and you completed a meditation
+		if(i == day && streakObj.daysMeditatedEachWeek[i] == "true" ) {
+				// Play a fade in animation on that days bubble
+				daysIcons[i].classList.add("currentDay");
+				setTimeout(() => daysIcons[i].classList.add("completed"), 300);
+		} 
+		// If you completed a meditation on a previous day
+		else if (streakObj.daysMeditatedEachWeek[i] == "true" ) {
+				daysIcons[i].classList.add("completed");
 		}
-
-		streakObj.streak--;
-		day--;
 	}
 	
 	
 	
 	
-	// If there is no streak or the streak is 0
-	
-	
-	
-	
+	// Display how long this past session was
+	// If the meditation was less than a minute, say the amount of seconds
+	// Otherwise state the amount of minutes
 	if(timerStats.timeMeditated < ONE_MINUTE) {
 		timeMeditated.innerText = (timerStats.timeMeditated / ONE_SECOND) - 1;
 		timeLabel.innerText = " seconds ";
@@ -336,6 +383,7 @@ function dispalyRecapScreen() {
 		timeLabel.innerText = " minutes ";
 	}
 	
+	// Functionality for the close button: return to homescreen
 	let closeButton = document.querySelector("#closeButton");
 	closeButton.addEventListener("click", () => {
 		recapScreen.classList.add("hidden");

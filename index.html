@@ -4,8 +4,15 @@
     <meta charset="UTF-8" />
     <title>Meditation Timer</title>
     <link rel='stylesheet' href='style.css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
+	
+	<button id="statsButton">
+		<i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i> 
+	</button>
+
+	
 	<h1 id="title" class = "">Meditation Timer</h1>
 	<div class='container center'>
 
@@ -70,13 +77,13 @@
 				</div>
 				<div id="daysContainer">
 					<div id="daysIcons">
+						<span class="dayIcon" id="sunday">S</span>
 						<span class="dayIcon" id="monday">M</span>
 						<span class="dayIcon" id="tuesday">T</span>
 						<span class="dayIcon" id="wednesday">W</span>
 						<span class="dayIcon" id="thursday">T</span>
 						<span class="dayIcon" id="friday">F</span>
 						<span class="dayIcon" id="saturday">S</span>
-						<span class="dayIcon" id="sunday">S</span>
 					</div>
 				</div>
 				<span id="congratsMessage">Congratulations!</span>
@@ -94,6 +101,8 @@
     <button class="button play hidden">&#9658 </button>
 		
 	<button class="button pause hidden"><div id="pauseText">&#9616&#9616</div></button>
-    <script  src="main.js"></script> 
+	
+	
+    <script  src="bundle.js"></script> 
 </body>
 </html>
