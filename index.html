@@ -7,102 +7,114 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
+	<div id='bodyContainer'>
+		<button id="statsButton" class="hidden">
+			<i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i> 
+		</button>
 	
-	<button id="statsButton">
-		<i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i> 
-	</button>
-
+		
+		<h1 id="title" class = "">Meditation Timer</h1>
+		<div class='container center'>
 	
-	<h1 id="title" class = "">Meditation Timer</h1>
-	<div class='container center'>
-
-
-	    <form class="">
-	    
-	    <div class="formElementsGrid">
-	    
-	    	<label for="duration">Duration</label>
-	    	 <div class="inputContainer">
-	    		<span id="durationErrMsg"></span>
-	    		<br>
-	    		<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
-	    	</div>
-	    	
-	    	<label for="warmup">Warm up</label>
-	    	<div class="inputContainer">
-	    		<span id="warmupErrMsg"></span>
-	    		<br>
-	    		<input type="number" min="0" placeholder="seconds" name="warmup" id="warmup" required>
-	    	</div>
-	    	
-	    	<label for="startingBell">Starting Bell</label>
-	    	<div class="selectContainer">
-		    	<select id="startingBell" name="startingBell">
-		    		<option value="none">None</option>
-		    		<option value="gong">Gong</option>
-		    		<option value="bell">Bell</option>
-		    	</select>
-	    	</div>
-	    	<label for="endingBell">Ending Bell</label>
-	    	<div class="selectContainer">
-		    	<select id="endingBell" name="endingBell">
-		    		<option value="none">None</option>
-		    		<option value="gong" selected>Gong</option>
-		    		<option value="bell">Bell</option>
-		    	</select>
-	    	</div>
-	    </div>
-	    	<div class="center">
-	    		<button id="submit">Start</button>
-	    		
-	    	</div>
-	    	
-	    
-	    </form>
-	    <div id="countdownContainer">
-	    	<span class="hidden" id="warmupText">get comfortable</span>
-	    	<h1 class="hidden"  id="countdown" ></h1>
-	    	<div id="endSessionButtonContainer">
-		    	<button class="hidden" id="discard">Discard Session</button>
-		    	<button class="hidden" id="finish">Finish</button>
-	    	</div>
-		</div>
-		
-		
-		<div id="recapScreen" class="hidden">
-			<div class="center">
-				<div id="consecutiveDaysTitle">
-					<span id="daysCounter">2</span>
-					<span>consecutive days</span>
-				</div>
-				<div id="daysContainer">
-					<div id="daysIcons">
-						<span class="dayIcon" id="sunday">S</span>
-						<span class="dayIcon" id="monday">M</span>
-						<span class="dayIcon" id="tuesday">T</span>
-						<span class="dayIcon" id="wednesday">W</span>
-						<span class="dayIcon" id="thursday">T</span>
-						<span class="dayIcon" id="friday">F</span>
-						<span class="dayIcon" id="saturday">S</span>
+	
+		    <form class="">
+		    
+		    <div class="formElementsGrid">
+		    
+		    	<label for="duration">Duration</label>
+		    	 <div class="inputContainer">
+		    		<span id="durationErrMsg"></span>
+		    		<br>
+		    		<input type="number" min="0" placeholder="minutes" name="duration" id="duration" required>
+		    	</div>
+		    	
+		    	<label for="warmup">Warm up</label>
+		    	<div class="inputContainer">
+		    		<span id="warmupErrMsg"></span>
+		    		<br>
+		    		<input type="number" min="0" placeholder="seconds" name="warmup" id="warmup" required>
+		    	</div>
+		    	
+		    	<label for="startingBell">Starting Bell</label>
+		    	<div class="selectContainer">
+			    	<select id="startingBell" name="startingBell">
+			    		<option value="none">None</option>
+			    		<option value="gong">Gong</option>
+			    		<option value="bell">Bell</option>
+			    	</select>
+		    	</div>
+		    	<label for="endingBell">Ending Bell</label>
+		    	<div class="selectContainer">
+			    	<select id="endingBell" name="endingBell">
+			    		<option value="none">None</option>
+			    		<option value="gong" selected>Gong</option>
+			    		<option value="bell">Bell</option>
+			    	</select>
+		    	</div>
+		    </div>
+		    	<div class="center">
+		    		<button id="submit">Start</button>
+		    		
+		    	</div>
+		    	
+		    
+		    </form>
+		    <div id="countdownContainer">
+		    	<span class="hidden" id="warmupText">get comfortable</span>
+		    	<h1 class="hidden"  id="countdown" ></h1>
+		    	<div id="endSessionButtonContainer">
+			    	<button class="hidden" id="discard">Discard Session</button>
+			    	<button class="hidden" id="finish">Finish</button>
+		    	</div>
+			</div>
+			
+			
+			<div id="recapScreen" class="hidden">
+				<div class="center">
+					<div id="consecutiveDaysTitle">
+						<span id="daysCounter">2</span>
+						<span>consecutive days</span>
 					</div>
+					<div id="daysContainer">
+						<div id="daysIcons">
+							<span class="dayIcon" id="sunday">S</span>
+							<span class="dayIcon" id="monday">M</span>
+							<span class="dayIcon" id="tuesday">T</span>
+							<span class="dayIcon" id="wednesday">W</span>
+							<span class="dayIcon" id="thursday">T</span>
+							<span class="dayIcon" id="friday">F</span>
+							<span class="dayIcon" id="saturday">S</span>
+						</div>
+					</div>
+					<span id="congratsMessage">Congratulations!</span>
+					<div>
+						<span id="timeMeditated">3</span>
+						<span id="timeLabel">minutes</span>
+						<span>completed</span>
+					</div>
+					
+					<button id="closeButton">Close</button>
 				</div>
-				<span id="congratsMessage">Congratulations!</span>
-				<div>
-					<span id="timeMeditated">3</span>
-					<span id="timeLabel">minutes</span>
-					<span>completed</span>
-				</div>
+			</div>
+	    </div>
+	    
+	    <button class="button play hidden">&#9658 </button>
+			
+		<button class="button pause hidden"><div id="pauseText">&#9616&#9616</div></button>
+		
+		
+	
+	</div>
+	
+	<div id="footer">
+			<div class="center">
+				<span>Found a bug?
+					<a href="google.com">Let me know</a>
+				 </span>
 				
-				<button id="closeButton">Close</button>
 			</div>
 		</div>
-    </div>
-    
-    <button class="button play hidden">&#9658 </button>
 		
-	<button class="button pause hidden"><div id="pauseText">&#9616&#9616</div></button>
-	
-	
     <script  src="bundle.js"></script> 
 </body>
 </html>
