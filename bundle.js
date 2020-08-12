@@ -86,6 +86,9 @@ function setTimerStats() {
 
 
 function warmupCountdown() {
+	// Pause whatever sound was playing
+	pauseSound(previousSound);
+
 	if(timerStats.warmup < ONE_SECOND) {
 		clearInterval(warmupInterval);
 		countdown.innerText = `00:00`;
@@ -96,6 +99,7 @@ function warmupCountdown() {
 		meditationCountdown();
 		countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
 		// Play the start gong
+		playSound(startingBell);
 		return;
 	} else {
 		let seconds = Math.floor((timerStats.warmup ) / 1000);
@@ -153,8 +157,9 @@ function completeSession() {
 	timerStats.endTime = new Date();
 	// Find out the session length in ms
 	timerStats.timeMeditated = timerStats.totalTime - timerStats.timeLeft;
-	console.log(timerStats);
 	
+	playSound(endingBell);
+
 	finishMeditating();
 	dispalyRecapScreen();
 }
@@ -185,6 +190,7 @@ function togglePauseScreen() {
 	finish.classList.toggle("hidden");
 	pause.classList.toggle("hidden");
 	play.classList.toggle("hidden");
+
 }
 
 function finishMeditating() {
@@ -331,6 +337,40 @@ function displayHomeScreen() {
 	form.classList.remove("hidden");
 }
 
+function playSound(element) {
+	previousSound = element.value;
+	if(element.value == "none") return;
+	//Get the html element of the audio for the key that was pressed
+	var audio = document.querySelector(`audio[data-sound='${element.value}']`);
+	
+
+	//Start playing the audio from the beginning each time you press the key
+	audio.currentTime = 0;
+	audio.play();
+
+	
+}
+
+function pauseSound(previousSound) {
+	if(previousSound == "none") return;
+	//Get the html element of the audio for the key that was pressed
+	var audio = document.querySelector(`audio[data-sound='${previousSound}']`);
+	
+	//Stop playing the audio
+	audio.pause();
+}
+
+function resumeSound(previousSound) {
+	if(previousSound == "none") return;
+	//Get the html element of the audio for the key that was pressed
+	var audio = document.querySelector(`audio[data-sound='${previousSound}']`);
+	
+	// If the audio finished, then do not play it again
+	if(audio.ended) return;
+
+	//Stop playing the audio
+	audio.play();
+}
 
 // Query selectors for every html element needed to start meditating
 var submit = document.querySelector("#submit");
@@ -358,10 +398,32 @@ var recapScreen = document.querySelector("#recapScreen");
 // Start the timer when the form is submitted
 submit.addEventListener("click", startTimer);
 
+// Play a preview when you chage the start or ending bell
+var previousSound = "none";
+startingBell.addEventListener('input', () => {
+	// Stop the previos sound playing
+	pauseSound(previousSound);
+
+	// Play a prieview of the selected sound
+	playSound(startingBell);
+});
+endingBell.addEventListener('input', () => {
+	// Stop the previos sound playing
+	pauseSound(previousSound);
+
+	// Play a prieview of the selected sound
+	playSound(startingBell);
+});
+
 // Start and stop the timer with the pause and play buttons
-pause.addEventListener("click", ()=> {clearInterval(countdownInterval);  togglePauseScreen() });
+pause.addEventListener("click", ()=> {
+	clearInterval(countdownInterval); 
+	pauseSound(previousSound); 
+	togglePauseScreen() 
+});
 play.addEventListener("click", ()=> { 
 	countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
+	resumeSound(previousSound);
 	togglePauseScreen();
 });
 

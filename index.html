@@ -40,7 +40,8 @@
 			    	<select id="startingBell" name="startingBell">
 			    		<option value="none">None</option>
 			    		<option value="gong">Gong</option>
-			    		<option value="bell">Bell</option>
+						<option value="bell">Bell</option>
+						<option value="ombu">Ombu</option>
 			    	</select>
 		    	</div>
 		    	<label for="endingBell">Ending Bell</label>
@@ -48,7 +49,8 @@
 			    	<select id="endingBell" name="endingBell">
 			    		<option value="none">None</option>
 			    		<option value="gong" selected>Gong</option>
-			    		<option value="bell">Bell</option>
+						<option value="bell">Bell</option>
+						<option value="ombu">Ombu</option>
 			    	</select>
 		    	</div>
 		    </div>
@@ -113,8 +115,12 @@
 				 </span>
 				
 			</div>
-		</div>
+	</div>
 		
+	<audio data-sound="bell"  src='./audio/bell.mp3'></audio>
+	<audio data-sound="gong" src="./audio/kangse.mp3"></audio>
+	<audio data-sound="ombu" src="./audio/ombu.mp3"></audio>
+
     <script  src="bundle.js"></script> 
 </body>
 </html>
