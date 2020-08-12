@@ -10,6 +10,7 @@ var countdownInterval;
 // 1 second = 1000ms
 const ONE_SECOND = 1000;
 const ONE_MINUTE = 60 * 1000;
+const TEN_MILLIS = 10;
 const INPUT_ERR_MSG = "Must be a whole number greater than 0";
 
 
@@ -78,7 +79,7 @@ function removeInputErrMsg(inputElement, errMsgElement){
 
 function setTimerStats() {
 	timerStats.totalTime = Number(duration.value) * ONE_MINUTE;
-	timerStats.timeLeft = Number(duration.value) * ONE_MINUTE;
+	timerStats.timeLeft = Number(duration.value) * ONE_MINUTE + ONE_SECOND;
 	timerStats.warmup = Number(  warmup.value  ) * ONE_SECOND;
 	timerStats.startingBell = startingBell.value;
 	timerStats.endingBell = endingBell.value;
@@ -97,7 +98,7 @@ function warmupCountdown() {
 		
 		// Start the meditation countdown
 		meditationCountdown();
-		countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
+		countdownInterval = setInterval(meditationCountdown, TEN_MILLIS);
 		// Play the start gong
 		playSound(startingBell);
 		return;
@@ -112,7 +113,7 @@ function warmupCountdown() {
 
 
 function meditationCountdown() {
-	if(timerStats.timeLeft < ONE_SECOND) {
+	if(timerStats.timeLeft < TEN_MILLIS) {
 		completeSession();
 		countdown.innerText = `00:00`;
 		clearInterval(countdownInterval);
@@ -146,7 +147,7 @@ function meditationCountdown() {
 		countdown.innerText = countdownText;
 		
 		//Decrement the amount of time left by 1000ms or 1 second
-		timerStats.timeLeft -= ONE_SECOND;
+		timerStats.timeLeft -= TEN_MILLIS;
 			
 	}
 	
@@ -159,7 +160,7 @@ function completeSession() {
 	timerStats.timeMeditated = timerStats.totalTime - timerStats.timeLeft;
 	
 	playSound(endingBell);
-
+	console.log(timerStats.timeMeditated)
 	finishMeditating();
 	dispalyRecapScreen();
 }
@@ -243,10 +244,11 @@ function dispalyRecapScreen() {
 		localStorage.setItem("sessions", `${sessions}|${timerStats.endTime.toISOString()}~${timerStats.timeMeditated}`);
 	}
 	let sessionData = localStorage.getItem("sessions").split("|");
+	/*
 	console.log(localStorage);
 	console.log(sessionData);
-	console.log(streakObj)
-	
+	console.log(streakObj); 
+	*/
 	
 	// Display how long of a streak you're on
 	daysCounter.innerText = `${streakObj.streak}`;
@@ -270,7 +272,7 @@ function dispalyRecapScreen() {
 	// If the meditation was less than a minute, say the amount of seconds
 	// Otherwise state the amount of minutes
 	if(timerStats.timeMeditated < ONE_MINUTE) {
-		timeMeditated.innerText = (timerStats.timeMeditated / ONE_SECOND) - 1;
+		timeMeditated.innerText = Math.ceil((timerStats.timeMeditated / ONE_SECOND) );
 		timeLabel.innerText = " seconds ";
 	} else {
 		timeMeditated.innerText = Math.floor(timerStats.timeMeditated / ONE_MINUTE);
@@ -422,7 +424,7 @@ pause.addEventListener("click", ()=> {
 	togglePauseScreen() 
 });
 play.addEventListener("click", ()=> { 
-	countdownInterval = setInterval(meditationCountdown, ONE_SECOND);
+	countdownInterval = setInterval(meditationCountdown, TEN_MILLIS);
 	resumeSound(previousSound);
 	togglePauseScreen();
 });
